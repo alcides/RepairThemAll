@@ -39,7 +39,6 @@ class Astor(RepairTool):
                                 "%s_%s_%s_%s" % (self.name, bug.benchmark.name, bug.project, bug.bug_id))
         repair_task.working_directory = bug_path
         self.init_bug(bug, bug_path)
-
         jvm4testexecution = JAVA7_HOME
         if bug.compliance_level() > 7:
             jvm4testexecution = JAVA8_HOME
@@ -106,6 +105,8 @@ time java %s -cp %s %s \\
        ":".join(test_bin_folders),
        self.parameters,
        classpath)
+
+
             log_path = os.path.join(repair_task.log_dir(), "repair.log")
             if not os.path.exists(os.path.dirname(log_path)):
                 os.makedirs(os.path.dirname(log_path))
@@ -156,6 +157,10 @@ def cardumen_init(args):
     args.parameters += ":maxCombinationVariableLimit:true:maxVarCombination:1000"
     return init(args, "Cardumen", "cardumen")
 
+def figra_init(args):
+    args.parameters += ":maxCombinationVariableLimit:true:maxVarCombination:1000"
+    return init(args, "Figra", "figra")
+
 def jgenprog_init(args):
     return init(args, "jGenProg", "jgenprog")
 
@@ -190,4 +195,7 @@ parser = add_repair_tool("jMutRepair", jMutRepair_init, 'Repair the bug with jMu
 astor_args(parser)
 
 parser = add_repair_tool("Cardumen", cardumen_init, 'Repair the bug with Cardumen')
+astor_args(parser)
+
+parser = add_repair_tool("Figra", figra_init, 'Repair the bug with Figra')
 astor_args(parser)
